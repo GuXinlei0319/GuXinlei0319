@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="./reactivity.global.js"></script>
+  <!-- <script src="../../../node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+  <script>
+    // effect 代表副作用函数，如果此函数依赖的数据发生变化了，会重新执行
+    // reactive 讲数据编程响应式 proxy
+    const { effect, reactive } = VueReactivity // 解构变量
+    const state = reactive({ flag: true, name: 'jw', age: 30, address: { num: 10 } })
+
+    let waiting = false
+    let runner = effect(() => {
+      app.innerHTML = state.age
+    }, {
+      scheduler() { // 调度函数 自定义设置如何更新数据 实现组件的异步更新
+        console.log('running')
+        if (!waiting) { // 只有第一次进入
+          waiting = true
+          setTimeout(() => { // 同步执行结束后，执行runner()  -->批处理，只执行一次定时器
+            console.log('run')
+            runner()
+            waiting = false
+          }, 1000)
+        }
+
+      }
+    })
+    console.log(state.address) //深度代理实现
+    state.age = 1000
+    state.age = 2000
+    state.age = 3000
+    state.age = 4000
+    state.age = 5000
+
+    setTimeout(() => {
+      state.age = 1
+      state.age = 2
+      state.age = 3
+      state.age = 4
+      state.age = 5
+    }, 3000)
+  </script>
+</body>
+
+</html>

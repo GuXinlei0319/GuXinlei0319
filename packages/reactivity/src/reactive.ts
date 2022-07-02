@@ -8,7 +8,7 @@ const reactiveMap = new WeakMap();
 // 2) 代理对象被再次代理，可以直接返回
 export function reactive(target) {
 
-  // 不是对象，直接退出
+  // 不是对象，直接退出 
   if (!isObject(target)) {
     return
   }

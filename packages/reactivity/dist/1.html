@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="./reactivity.global.js"></script>
+  <!-- <script src="../../../node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+  <script>
+    // effect 代表副作用函数，如果此函数依赖的数据发生变化了，会重新执行
+    // reactive 讲数据编程响应式 proxy
+    const { effect, reactive } = VueReactivity // 解构变量
+    const state = reactive({ name: 'zf', age: '13',address:'1111' })
+    // console.log(state)
+
+    
+    // const data = {name: 'zf', age: '13'}
+    // const state1 = reactive(data)
+    // const state2 = reactive(data)
+    // console.log(state1 === state2) // false 两个地址 new
+
+    // debugger
+    // const state3 = reactive(data)
+    // const state4 = reactive(state3)
+    // console.log(state3 === state4) // false
+  effect(()=>{
+    state.age = Math.random() // 死循环
+    app.innerHTML = state.name + '今年' + state.age + '岁了'
+  })
+
+  // state.address
+
+  setTimeout(() => {  // setInterval 循环， setTimeout 执行一次
+    // state.age = '13'
+    state.age ++
+  }, 1000);
+
+  // 稍后name 和age发生变化，会重新执行effect函数
+  // setTimeout(() => {
+  //   state.age = 14
+  //   state.name = 'Guxinlei'
+  // }, 1000);
+
+  </script>
+</body>
+
+</html>

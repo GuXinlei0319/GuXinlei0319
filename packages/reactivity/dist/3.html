@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="./reactivity.global.js"></script>
+  <!-- <script src="../../../node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+  <script>
+    // effect 代表副作用函数，如果此函数依赖的数据发生变化了，会重新执行
+    // reactive 讲数据编程响应式 proxy
+    const { effect, reactive } = VueReactivity // 解构变量
+    const state = reactive({ flag: true, name: 'jw', age: 30 })
+
+    let runner = effect(() => {
+      app.innerHTML = state.age
+    })
+
+    // effectScope()作用域effect
+    runner.effect.stop()
+
+    setTimeout(() => {
+      state.age = 1000 // 未执行effect
+      // console.log(state.age) // 1000
+      setTimeout(() => {
+        runner()
+      }, 1000)
+    }, 1000);
+
+
+  </script>
+</body>
+
+</html>

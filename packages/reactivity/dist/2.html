@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script src="./reactivity.global.js"></script>
+  <!-- <script src="../../../node_modules/@vue/reactivity/dist/reactivity.global.js"></script> -->
+  <script>
+    // effect 代表副作用函数，如果此函数依赖的数据发生变化了，会重新执行
+    // reactive 讲数据编程响应式 proxy
+    const { effect, reactive } = VueReactivity // 解构变量
+    const state = reactive({ flag: true, name: 'jw', age: 30 })
+
+    effect(() => {
+
+      // 此时需要每次执行effect时，清理全部属性对应的effect依赖，重新收集
+
+      console.log('render')
+      app.innerHTML = state.flag ? state.name : state.age
+    })
+
+    setTimeout(() => {
+      state.flag = false
+      setTimeout(() => {
+        console.log('修改name,此时effect收集的是age，原则上不更新的')
+        state.name = 'guxinlei' // effect不收集name，所以应该不执行effect
+      }, 1000)
+    }, 1000);
+
+
+  </script>
+</body>
+
+</html>
